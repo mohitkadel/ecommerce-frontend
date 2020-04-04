@@ -13,7 +13,7 @@ import { filter, map } from 'rxjs/operators';
 })
 export class HeaderComponent implements OnInit {
 
-	user: User;
+	_user: User;
 	cartQuantity: Observable<any>;
 
 	constructor(private router: Router,
@@ -21,15 +21,14 @@ export class HeaderComponent implements OnInit {
 		private productsService: ProductsService) {
 		this.loginService.user.subscribe(user => {
 			if(user) {
-				this.user = new User(user)
+				this._user = new User(user)
+				this.cartQuantity =  this.productsService.cart.pipe(map(res => {
+					return (res && res.length) || 0;
+				}));
 			}
 			else
-				this.user = user
+				this._user = user
 		});
-
-		this.cartQuantity =  this.productsService.cart.pipe(map(res => {
-			return (res && res.length) || 0;
-		}));
 	}
 
 	ngOnInit() {}
@@ -37,5 +36,9 @@ export class HeaderComponent implements OnInit {
 	logout() {
 		this.loginService.logout();
 		this.router.navigate(['/login']);
+	}
+
+	get user() {
+		return this._user;
 	}
 }

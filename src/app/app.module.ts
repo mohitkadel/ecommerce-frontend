@@ -31,12 +31,13 @@ import { ProductComponent } from './product/product.component';
 
 const routes: Routes = [
 	{ path: '', component: HomeComponent },
-	{ path: 'cart', component: CartComponent },
+	{ path: 'cart', component: CartComponent, canActivate: [AuthGuard] },
 	{
 	    path: 'account',
-	    loadChildren: () => import('./account/account.module').then(m => m.AccountModule)
+	    loadChildren: () => import('./account/account.module').then(m => m.AccountModule),
+	    canActivate: [AuthGuard]
   	},
-	{ path: 'product/:id', component: ProductComponent },
+	{ path: 'product/:id', component: ProductComponent, canActivate: [AuthGuard] },
 	{ path: 'login', component: LoginComponent },
 	{ path: 'signup', component: SignupComponent },
 

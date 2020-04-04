@@ -13,11 +13,13 @@ export class UserService {
 	_user: User;
 
 	constructor(private http: HttpClient, private loginService: LoginService) {
-		this._user = this.loginService.userValue;
+		if (this.loginService.userValue) {
+			this._user = new User(this.loginService.userValue);
+		}
 	}
 
 	get user() {
-		return new User(this._user);
+		return this._user;
 	}
 
 	getUsers(query) {
@@ -59,7 +61,11 @@ export class UserService {
 	 */
 	order(body) {
 		console.log('this.user.id')
-		console.log(this.user.id)
-		return this.http.post('/users/' + this.user.id + '/order', {});
+		console.log(body)
+		return this.http.post('/users/' + this.user.id + '/order', { orders: body })
+			.pipe(map((data: User) => {
+				localStorage.setItem('user', JSON.stringify(data));
+				return data;
+			}));
 	}
 }

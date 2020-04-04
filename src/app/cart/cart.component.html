@@ -14,7 +14,7 @@
 					<tr *ngIf="!cart || (cart && cart.length==0)">
 						<td colspan="4">No products in cart</td>
 					</tr>
-					<tr *ngFor="let item of cart">
+					<tr *ngFor="let item of cart; let i = index">
 						<td>
 							<figure class="itemside">
 								<div class="aside">
@@ -38,7 +38,7 @@
 							</div> <!-- price-wrap .// -->
 						</td>
 						<td class="text-right">
-							<a href="javascript:void(0)" class="btn btn-danger" (click)="removeFromCart(item.product.id)"> Remove</a>
+							<a href="javascript:void(0)" class="btn btn-danger" (click)="removeFromCart(i)"> Remove</a>
 						</td>
 					</tr>
 				</tbody>

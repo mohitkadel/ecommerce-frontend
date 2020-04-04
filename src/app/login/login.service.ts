@@ -41,6 +41,9 @@ export class LoginService {
 				// store user details and basic auth credentials in local storage to keep user logged in between page refreshes
 				this.makeLogin(res);
 				return res.data;
+			}, (error: any) => {
+				console.log(error);
+				return error;
 			}));
 	}
 

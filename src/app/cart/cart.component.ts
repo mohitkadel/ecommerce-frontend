@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ProductsService } from '../home/products.service';
 import { UserService } from '../user/user.service';
+import { LoginService } from '../login/login.service';
 import { Product } from '../home/product.model';
 import * as _ from 'lodash';
 
@@ -25,8 +27,15 @@ export class CartComponent implements OnInit {
 		password: new FormControl(''),
 	});
 
-	constructor(private productsService: ProductsService, private userService: UserService) {
-
+	constructor(
+		private productsService: ProductsService,
+		private userService: UserService,
+		private loginService: LoginService,
+		private router: Router
+	) {
+		if (!this.loginService.userValue) {
+			this.router.navigate(['/login']);
+		}
 	}
 
 	ngOnInit() {
@@ -41,17 +50,10 @@ export class CartComponent implements OnInit {
 		return Array(n);
 	}
 
-	changeQuantity() {
 
-	}
-
-	updateCart() {
-		// this.productsService.updateCart()
-	}
-
-	removeFromCart(productId) {
-		_.remove(this.cart, (obj) => {
-			return obj.product.id == productId;
+	removeFromCart(i) {
+		_.remove(this.cart, (obj, index) => {
+			return index == i;
 		})
 		this.productsService.updateCart(this.cart);
 	}
@@ -63,7 +65,8 @@ export class CartComponent implements OnInit {
 			body.push({ product_id: cart.product.id, final_price: cart.product.price, quantity: cart.quantity })
 		}
 		this.userService.order(body).subscribe((res) => {
-			console.log(res)
+			// Remove products from cart
+			this.productsService.updateCart([])
 		}, (error) => {
 			console.log(error)
 		})

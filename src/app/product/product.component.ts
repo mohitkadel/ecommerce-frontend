@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProductsService } from '../home/products.service'
+import { UserService } from '../user/user.service'
 import { Product } from '../home/product.model';
 
 @Component({
@@ -17,9 +18,16 @@ export class ProductComponent implements OnInit {
 	constructor(
 		private route: ActivatedRoute,
 		private router: Router,
-		private productService: ProductsService) {}
+		private productService: ProductsService,
+		private userService: UserService) {
+		console.log("here")
+		// redirect to login if not logged in
+		if (!this.userService.user) {
+			this.router.navigate(['/login']);
+		}
+	}
 
-	ngOnInit() {
+	ngOnInit() {console.log("here2")
 		this.id = this.route.snapshot.params.id;
 		this.getProduct();
 

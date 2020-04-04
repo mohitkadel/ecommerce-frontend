@@ -4,12 +4,14 @@ interface ICoupon {
     exp_time: string;
 }
 
-class Order {
+export class Order {
     private _product_id: string;
     private _product_price: number;
     private _final_price: number;
     private _status: string;
     private _coupon: ICoupon;
+
+    private _product: any;
 
     constructor(order) {
         this._product_id = order.product_id;
@@ -39,6 +41,13 @@ class Order {
         return this._coupon;
     }
 
+    set product(product) {
+        this._product = product;
+    }
+
+    get product() {
+        return this._product;
+    }
 }
 
 export class User {
@@ -49,58 +58,58 @@ export class User {
     private _dob: string;
     private _status: string;
     private _role: number;
-    private _orders: Order[];
+    private _orders: Order[] = [];
     private _token: string;
     private _created_at: string;
     private _updated_at: string;
 
     constructor(user) {
-    	this._id = user._id
-    	this._email = user.email;
-    	this._name = user.name;
+        this._id = user._id
+        this._email = user.email;
+        this._name = user.name;
         this._gender = user.gender;
         this._dob = user.dob;
-    	this._status = user.status;
-    	this._role = user.role;
-    	this._token = user.token;
-    	this._created_at = user.created_at;
-    	this._updated_at = user.updated_at;
+        this._status = user.status;
+        this._role = user.role;
+        this._token = user.token;
+        this._created_at = user.created_at;
+        this._updated_at = user.updated_at;
 
-        for(let order of user.orders) {
+        for (let order of user.orders) {
             this._orders.push(new Order(order));
         }
     }
 
     get name() {
-    	return this._name;
+        return this._name;
     }
 
     get id() {
-    	return this._id;
+        return this._id;
     }
 
     get email() {
-    	return this._email;
+        return this._email;
     }
 
     get profile() {
-    	return this._gender;
+        return this._gender;
     }
 
     get status() {
-    	return this._status;
+        return this._status;
     }
 
     // get role() {
-    // 	for(let role in Role) {
-    // 		if(Role[role] == this._role)
-    // 			return role;
-    // 	}
-    // 	return this._role;
+    //     for(let role in Role) {
+    //         if(Role[role] == this._role)
+    //             return role;
+    //     }
+    //     return this._role;
     // }
 
     get token() {
-    	return this._token;
+        return this._token;
     }
 
     get orders(): Order[] {

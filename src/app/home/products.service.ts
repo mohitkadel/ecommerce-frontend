@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
 import { Product } from './product.model';
-
+import { UserService } from '../user/user.service'
 class Cart {
 	quantity: number;
 	product: Product;
@@ -20,17 +20,22 @@ export class ProductsService {
 
 	public products: Observable < Product[] > ;
 	public cart: Observable < Cart[] > ;
-	private _cart: any = [];
 
-	constructor(private http: HttpClient) {
-
+	constructor(
+		private http: HttpClient,
+		private userService: UserService) {
+		if(this.userService.user) {
+			this.cartSubject = new BehaviorSubject < Cart[] > (this.getCartFromLocalStorage());
+			this.cart = this.cartSubject.asObservable();
+		}
 		this.productSubject = new BehaviorSubject < Product[] > ([]);
-		this.cartSubject = new BehaviorSubject < Cart[] > (this.getCartFromLocalStorage());
 
 		this.products = this.productSubject.asObservable();
-		this.cart = this.cartSubject.asObservable();
 	}
 
+	public get cartValue(): Cart[] {
+		return this.cartSubject.value;
+	}
 
 	getProducts(query) {
 		return this.http.get('/products', { params: query })
@@ -40,17 +45,9 @@ export class ProductsService {
 					products.push(new Product(product))
 				}
 
-				// store user details and basic auth credentials in local storage to keep user logged in between page refreshes
 				this.productSubject.next(products);
 				return products;
 			}));
-		// .pipe(map((data: User[]) => {
-		// 		let users: User[] = [];
-		// 		for(let user of data) {
-		// 			users.push(new User(user))
-		// 		}
-		// 		return users;
-		// 	}));
 	}
 
 
@@ -62,7 +59,7 @@ export class ProductsService {
 	}
 
 	getCartFromLocalStorage() {
-		let cart = JSON.parse(localStorage.getItem('cart')) || [];
+		let cart = JSON.parse(localStorage.getItem('cart' + this.userService.user.id)) || [];
 		for (let item of cart) {
 			item.product = new Product(item.product);
 		}
@@ -70,19 +67,18 @@ export class ProductsService {
 	}
 
 	pushToLocalStorage(c: any) {
-		let cart: any = JSON.parse(localStorage.getItem('cart')) || [];
-		if(Array.isArray(c)) {
-			for(let obj of c) {
+		let cart: any = JSON.parse(localStorage.getItem('cart' + this.userService.user.id)) || [];
+		if (Array.isArray(c)) {
+			for (let obj of c) {
 				obj.product = JSON.parse(obj.product.toString());
 			}
 			cart = c;
-		}
-		else{
+		} else {
 			c.product = JSON.parse(c.product.toString());
 			cart.push(c);
 		}
 
-		localStorage.setItem('cart', JSON.stringify(cart));
+		localStorage.setItem('cart' + this.userService.user.id, JSON.stringify(cart));
 	}
 
 	updateCart(cart) {
