@@ -1,0 +1,36 @@
+<header class="section-header">
+	<section class="header-main border-bottom">
+		<div class="container">
+			<div class="row align-items-center">
+				<div class="col-lg-2 col-4">
+					<a [routerLink]="['./']" class="brand-wrap">
+						<!-- <img class="logo" src="images/logo.png"> -->
+						Fruits
+					</a> <!-- brand-wrap.// -->
+				</div>
+				<div class="col-lg-6 col-sm-12"></div>
+				<div class="col-lg-4 col-sm-6 col-12">
+					<div class="widgets-wrap float-md-right">
+						<div class="widget-header mr-3" *ngIf="user">
+							<a [routerLink]="['./cart']" class="icon icon-sm rounded-circle border"><i class="fa fa-shopping-cart"></i></a>
+							<span class="badge badge-pill badge-danger notify">{{cartQuantity | async}}</span>
+						</div>
+						<div class="widget-header icontext">
+							<a [routerLink]="['./account']" class="icon icon-sm rounded-circle border" *ngIf="user"><i class="fa fa-user"></i></a>
+							<div class="text">
+								<span class="text-muted" *ngIf="user">Welcome {{user.name}}!</span>
+								<div *ngIf="user">
+									<a href="javascript:void(0)" (click)="logout()">Logout</a>
+								</div>
+								<div *ngIf="!user">
+									<a [routerLink]="['./login']">Sign in</a> |
+									<a [routerLink]="['./signup']"> Register</a>
+								</div>
+							</div>
+						</div>
+					</div> <!-- widgets-wrap.// -->
+				</div> <!-- col.// -->
+			</div> <!-- row.// -->
+		</div> <!-- container.// -->
+	</section> <!-- header-main .// -->
+</header> <!-- section-header.// -->

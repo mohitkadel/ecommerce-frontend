@@ -1,0 +1,62 @@
+<!-- <div class="row">
+	<div class="col-md-5 mx-auto">
+		<div id="second"> -->
+<div class="myform form ">
+	<div class="logo mb-3">
+		<div class="col-md-12 text-center">
+			<h1>Signup</h1>
+		</div>
+	</div>
+	<div *ngIf="errors" class="alert alert-danger">
+		<ul>
+			<li *ngFor="let error of errors"><strong>{{error.param}}</strong> {{error.msg}}</li>
+		</ul>
+	</div>
+	<form [formGroup]="signupForm" #myForm="ngForm" (ngSubmit)="onSubmit()" novalidate>
+		<div class="form-group">
+			<label for="name">Name</label>
+			<input type="text" name="name" class="form-control" id="name" formControlName="name" [ngClass]="{'is-invalid' : (((signupForm.get('name').hasError('required') || signupForm.get('name').invalid) && signupForm.get('name').dirty) || (signupForm.get('name').hasError('required') && myForm.submitted))}">
+			<div class="invalid-feedback" *ngIf="(((signupForm.get('name').hasError('required')  || signupForm.get('name').invalid) && signupForm.get('name').dirty) || (signupForm.get('name').hasError('required') && myForm.submitted))">Name is invalid.</div>
+		</div>
+		<div class="form-group">
+			<label for="email">Email address</label>
+			<input type="email" name="email" class="form-control" id="email" formControlName="email" [ngClass]="{'is-invalid' : (((signupForm.get('email').hasError('required') || signupForm.get('email').invalid) && signupForm.get('email').dirty) || (signupForm.get('email').hasError('required') && myForm.submitted))}" placeholder="Enter email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+			<div class="invalid-feedback" *ngIf="(((signupForm.get('email').hasError('required')  || signupForm.get('email').invalid) && signupForm.get('email').dirty) || (signupForm.get('email').hasError('required') && myForm.submitted))">Email is invalid.</div>
+		</div>
+		<div class="form-group">
+			<label for="password">Password</label>
+			<input type="password" name="password" id="password" class="form-control" formControlName="password" placeholder="Enter Password" required [ngClass]="{'is-invalid' : ((signupForm.get('password').hasError('required') && signupForm.get('password').dirty) || (signupForm.get('password').hasError('required') && myForm.submitted))}">
+			<div class="invalid-feedback" *ngIf="((signupForm.get('password').hasError('required') && signupForm.get('password').dirty) || (signupForm.get('password').hasError('required') && myForm.submitted))">Password is required.</div>
+		</div>
+		<div class="form-group">
+			<label class="custom-control custom-radio custom-control-inline">
+				<input class="custom-control-input" formControlName="gender" checked="" type="radio" name="gender" value="Male">
+				<span class="custom-control-label"> Male </span>
+			</label>
+			<label class="custom-control custom-radio custom-control-inline">
+				<input class="custom-control-input" formControlName="gender" type="radio" name="gender" value="Female">
+				<span class="custom-control-label"> Female </span>
+			</label>
+		</div> <!-- form-group end.// -->
+		
+		<div class="form-group">
+			<label for="dob">Date of Birth</label>
+			<input type="date" name="dob" id="dob" class="form-control" formControlName="dob" placeholder="Enter Password" required [ngClass]="{'is-invalid' : ((signupForm.get('password').hasError('required') && signupForm.get('password').dirty) || (signupForm.get('password').hasError('required') && myForm.submitted))}">
+			<div class="invalid-feedback" *ngIf="((signupForm.get('password').hasError('required') && signupForm.get('password').dirty) || (signupForm.get('password').hasError('required') && myForm.submitted))">DOB is required.</div>
+
+		</div>
+
+		<div class="text-center mb-3">
+			<button type="submit" class=" btn btn-block mybtn btn-primary tx-tfm" [disabled]="myForm.submitted">Submit</button>
+		</div>
+
+		<div class="">
+			<div class="form-group">
+				<p class="text-center"><a href="/login" id="signin">Already have an account?</a></p>
+			</div>
+		</div>
+	</form>
+</div>
+<!-- 		</div>
+	</div>
+</div> -->

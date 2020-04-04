@@ -1,0 +1,29 @@
+<div class="row">
+	<aside class="col-md-3">
+		<img [src]="image ? image.url : ''" *ngFor="let image of product.images" width="100px" height="100px">
+	</aside>
+	<main class="col-md-9">
+		<div class="info-main">
+			<a class="h5 title" [routerLink]="['./']"> {{product.title}} </a>
+			<p> {{product.description}} </p>
+		</div>
+		<br>
+		<div class="info-aside">
+			<div class="price-wrap">
+				<span class="price h5"> ${{product.price}} </span>
+				<!-- <del class="price-old"> $198</del> -->
+			</div> <!-- info-price-detail // -->
+			<p class="text-success">Free shipping</p>
+			<br>
+			<div class="form-group">
+				<label>Quantity</label>
+				<select class="form-control" size="5" [(ngModel)]="quantity" name="quantity"> 
+					<option *ngFor="let q of getQuantity(product.quantity); let i = index;" [ngValue]="i+1">{{i+1}}</option>
+				</select>
+			</div>
+			<p>
+				<a href="javascript:void(0)" class="btn btn-primary btn-block" (click)="addToCart()"> Add to Cart </a>
+			</p>
+		</div>
+	</main>
+</div>

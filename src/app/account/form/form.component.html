@@ -1,0 +1,44 @@
+<article class="card mb-3">
+	<div class="card-body">
+		<figure class="icontext col">
+			<!-- <div class="icon">
+								<img class="rounded-circle img-sm border" src="images/avatars/avatar3.jpg">
+							</div> -->
+			<div class="text">
+				<h2>Update Details</h2>
+				<hr>
+				<div class="alert alert-success" *ngIf="success">{{success}}</div>
+				<div class="alert alert-danger" *ngIf="error">{{error}}</div>
+				<div class="form-group">
+					<label for="email">Email address</label>
+					<input type="email" name="email" class="form-control" id="email" value="{{user.email}}" readonly>
+				</div>
+				<form [formGroup]="accountForm" #myForm="ngForm" (ngSubmit)="onSubmit()" novalidate>
+					<div class="form-group">
+						<label for="name">Name</label>
+						<input type="text" name="name" class="form-control" id="name" formControlName="name" [ngClass]="{'is-invalid' : (((accountForm.get('name').hasError('required') || accountForm.get('name').invalid) && accountForm.get('name').dirty) || (accountForm.get('name').hasError('required') && myForm.submitted))}" required>
+						<div class="invalid-feedback" *ngIf="(((accountForm.get('name').hasError('required')  || accountForm.get('name').invalid) && accountForm.get('name').dirty) || (accountForm.get('name').hasError('required') && myForm.submitted))">Name is invalid.</div>
+					</div>
+					<div class="form-group">
+						<label class="custom-control custom-radio custom-control-inline">
+							<input class="custom-control-input" formControlName="gender" checked="" type="radio" name="gender" value="Male">
+							<span class="custom-control-label"> Male </span>
+						</label>
+						<label class="custom-control custom-radio custom-control-inline">
+							<input class="custom-control-input" formControlName="gender" type="radio" name="gender" value="Female">
+							<span class="custom-control-label"> Female </span>
+						</label>
+					</div>
+					<div class="form-group">
+						<label for="dob">Date of Birth</label>
+						<input type="date" name="dob" id="dob" class="form-control" formControlName="dob" placeholder="Enter Password" required [ngClass]="{'is-invalid' : ((accountForm.get('dob').hasError('required') && accountForm.get('dob').dirty) || (accountForm.get('dob').hasError('required') && myForm.submitted))}">
+						<div class="invalid-feedback" *ngIf="((accountForm.get('dob').hasError('required') && accountForm.get('dob').dirty) || (accountForm.get('dob').hasError('required') && myForm.submitted))">DOB is required.</div>
+					</div>
+					<div class="text-center mb-3">
+						<button type="submit" class=" btn btn-block mybtn btn-primary tx-tfm">Submit</button>
+					</div>
+				</form>
+			</div>
+		</figure>
+	</div> <!-- card-body .// -->
+</article> <!-- card.// -->

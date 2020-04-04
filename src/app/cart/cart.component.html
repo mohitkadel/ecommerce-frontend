@@ -1,0 +1,89 @@
+<div class="row">
+	<main class="col-md-9">
+		<div class="card">
+			<table class="table table-borderless table-shopping-cart">
+				<thead class="text-muted">
+					<tr class="small text-uppercase">
+						<th scope="col">Product</th>
+						<th scope="col" width="120">Quantity</th>
+						<th scope="col" width="120">Price</th>
+						<th scope="col" class="text-right" width="200"> </th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr *ngIf="!cart || (cart && cart.length==0)">
+						<td colspan="4">No products in cart</td>
+					</tr>
+					<tr *ngFor="let item of cart">
+						<td>
+							<figure class="itemside">
+								<div class="aside">
+									<img [src]="image.url" *ngFor="let image of item.product.images" width="100px" height="100px">
+								</div>
+								<figcaption class="info">
+									<a href="javascript:void(0)" [routerLink]="['../product/' + item.product.id]" class="title text-dark">{{item.product.title}}</a>
+									<p class="text-muted small">{{item.product.type}} <br> </p>
+								</figcaption>
+							</figure>
+						</td>
+						<td>
+							<select class="form-control" size="5" [(ngModel)]="item.quantity" name="quantity">
+								<option *ngFor="let q of getQuantity(item.product.quantity); let i = index;" [ngValue]="i+1">{{i+1}}</option>
+							</select>
+						</td>
+						<td>
+							<div class="price-wrap">
+								<var class="price">{{item.quantity*item.product.price | currency:"USD":"symbol" }} </var>
+								<small class="text-muted" *ngIf="item.quantity > 1"> {{item.product.price|currency:"USD":"symbol"}} each </small>
+							</div> <!-- price-wrap .// -->
+						</td>
+						<td class="text-right">
+							<a href="javascript:void(0)" class="btn btn-danger" (click)="removeFromCart(item.product.id)"> Remove</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="card-body border-top">
+				<a href="javascript:void(0)" class="btn btn-primary float-md-right" (click)="makePayment()"> Make Purchase <i class="fa fa-chevron-right"></i> </a>
+				<a href="/" class="btn btn-light"> <i class="fa fa-chevron-left"></i> Continue shopping </a>
+			</div>
+		</div> <!-- card.// -->
+	</main> <!-- col.// -->
+	<aside class="col-md-3">
+		<div class="card mb-3">
+			<div class="card-body">
+				<form [formGroup]="couponForm" (ngSubmit)="applyCoupon()">
+					<div class="form-group">
+						<label>Have coupon?</label>
+						<div class="input-group">
+							<input type="text" class="form-control" name="" placeholder="Coupon code">
+							<span class="input-group-append">
+								<button class="btn btn-primary">Apply</button>
+							</span>
+						</div>
+					</div>
+				</form>
+			</div> <!-- card-body.// -->
+		</div> <!-- card .// -->
+		<div class="card">
+			<div class="card-body">
+				<dl class="dlist-align">
+					<dt>Total price:</dt>
+					<dd class="text-right">{{totalPrice | currency:"USD":"symbol"}}</dd>
+				</dl>
+				<dl class="dlist-align">
+					<dt>Discount:</dt>
+					<dd class="text-right">USD 658</dd>
+				</dl>
+				<dl class="dlist-align">
+					<dt>Total:</dt>
+					<dd class="text-right  h5"><strong>$1,650</strong></dd>
+				</dl>
+				<hr>
+				<p class="text-center mb-3">
+					<img src="images/misc/payments.png" height="26">
+				</p>
+			</div> <!-- card-body.// -->
+		</div> <!-- card .// -->
+	</aside> <!-- col.// -->
+</div>

@@ -1,0 +1,42 @@
+<!-- <div class="row">
+	<div class="col-md-5 mx-auto">
+		<div id="first"> -->
+			<div class="myform form ">
+				<div class="logo mb-3">
+					<div class="col-md-12 text-center">
+						<h1>Login</h1>
+					</div>
+				</div>
+				<div class="alert alert-danger alert-dismissible fade show" *ngIf="error">
+					{{error.message}}
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<form [formGroup]="loginForm" #myForm="ngForm" (ngSubmit)="onSubmit()" novalidate>
+					<div class="form-group">
+						<label for="exampleInputEmail1">Email address</label>
+						<input type="email" name="email" class="form-control" id="email" formControlName="email" placeholder="Enter email" required [ngClass]="{'is-invalid' : (((loginForm.get('email').hasError('required') || loginForm.get('email').invalid) && loginForm.get('email').dirty) || (loginForm.get('email').hasError('required') && myForm.submitted))}" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+						<div class="invalid-feedback" *ngIf="(((loginForm.get('email').hasError('required')  || loginForm.get('email').invalid) && loginForm.get('email').dirty) || (loginForm.get('email').hasError('required') && myForm.submitted))">Email is invalid.</div>
+					</div>
+					<div class="form-group">
+						<label for="exampleInputEmail1">Password</label>
+						<input type="password" name="password" id="password" class="form-control" formControlName="password" placeholder="Enter Password" required [ngClass]="{'is-invalid' : ((loginForm.get('password').hasError('required') && loginForm.get('password').dirty) || (loginForm.get('password').hasError('required') && myForm.submitted))}">
+						<div class="invalid-feedback" *ngIf="((loginForm.get('password').hasError('required') && loginForm.get('password').dirty) || (loginForm.get('password').hasError('required') && myForm.submitted))">Password is required.</div>
+					</div>
+					<div class="text-center ">
+						<input type="submit" class=" btn btn-block mybtn btn-primary tx-tfm" value="Login" />
+					</div>
+					<div class="">
+						<div class="login-or">
+							<hr class="hr-or">
+						</div>
+					</div>
+					<div class="form-group">
+						<p class="text-center">Don't have account? <a href="/signup" id="signup">Sign up here</a></p>
+					</div>
+				</form>
+			</div>
+		<!-- </div>
+	</div>
+</div> -->
