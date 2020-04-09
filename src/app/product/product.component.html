@@ -1,6 +1,6 @@
 <div class="row">
 	<aside class="col-md-3">
-		<img [src]="image ? image.url : ''" *ngFor="let image of product.images" width="100px" height="100px">
+		<img [src]="image.url" *ngFor="let image of product.images" width="100px" height="100px">
 	</aside>
 	<main class="col-md-9">
 		<div class="info-main">
@@ -15,14 +15,17 @@
 			</div> <!-- info-price-detail // -->
 			<p class="text-success">Free shipping</p>
 			<br>
-			<div class="form-group">
+			<div class="form-group" *ngIf="product.quantity >= 1">
 				<label>Quantity</label>
 				<select class="form-control" size="5" [(ngModel)]="quantity" name="quantity"> 
 					<option *ngFor="let q of getQuantity(product.quantity); let i = index;" [ngValue]="i+1">{{i+1}}</option>
 				</select>
 			</div>
-			<p>
+			<p *ngIf="product.quantity >= 1">
 				<a href="javascript:void(0)" class="btn btn-primary btn-block" (click)="addToCart()"> Add to Cart </a>
+			</p>
+			<p *ngIf="product.quantity <= 0">
+				<a href="javascript:void(0)" class="btn btn-danger btn-block"> OUT OF STOCK </a>
 			</p>
 		</div>
 	</main>
