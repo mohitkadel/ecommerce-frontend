@@ -23,7 +23,7 @@ export class HeaderComponent implements OnInit {
 			if(user) {
 				this._user = new User(user)
 				this.cartQuantity =  this.productsService.cart.pipe(map(res => {
-					return (res && res.length) || 0;
+					return (res && res.bucket.length) || 0;
 				}));
 			}
 			else

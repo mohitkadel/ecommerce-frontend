@@ -4,11 +4,12 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
 import { Product } from './product.model';
+import { Cart, Bucket } from '../cart/cart.model';
 import { UserService } from '../user/user.service'
-class Cart {
-	quantity: number;
-	product: Product;
-}
+
+import * as _ from 'lodash';
+
+
 
 @Injectable({
 	providedIn: 'root'
@@ -16,16 +17,19 @@ class Cart {
 export class ProductsService {
 
 	private productSubject: BehaviorSubject < Product[] > ;
-	private cartSubject: BehaviorSubject < Cart[] > ;
+	private cartSubject: BehaviorSubject < Cart > ;
 
 	public products: Observable < Product[] > ;
-	public cart: Observable < Cart[] > ;
+	public cart: Observable < Cart > ;
+
+	private _cart: Cart;
 
 	constructor(
 		private http: HttpClient,
 		private userService: UserService) {
-		if(this.userService.user) {
-			this.cartSubject = new BehaviorSubject < Cart[] > (this.getCartFromLocalStorage());
+		if (this.userService.user) {
+			this._cart = this.getCartFromLocalStorage();
+			this.cartSubject = new BehaviorSubject < Cart > (this._cart);
 			this.cart = this.cartSubject.asObservable();
 		}
 		this.productSubject = new BehaviorSubject < Product[] > ([]);
@@ -33,7 +37,7 @@ export class ProductsService {
 		this.products = this.productSubject.asObservable();
 	}
 
-	public get cartValue(): Cart[] {
+	get cartValue(): Cart {
 		return this.cartSubject.value;
 	}
 
@@ -59,30 +63,26 @@ export class ProductsService {
 	}
 
 	getCartFromLocalStorage() {
-		let cart = JSON.parse(localStorage.getItem('cart' + this.userService.user.id)) || [];
-		for (let item of cart) {
-			item.product = new Product(item.product);
-		}
-		return cart;
+		this._cart = new Cart(JSON.parse(localStorage.getItem('cart' + this.userService.user.id)))
+		return this._cart;
 	}
 
-	pushToLocalStorage(c: any) {
-		let cart: any = JSON.parse(localStorage.getItem('cart' + this.userService.user.id)) || [];
-		if (Array.isArray(c)) {
-			for (let obj of c) {
-				obj.product = JSON.parse(obj.product.toString());
-			}
-			cart = c;
-		} else {
-			c.product = JSON.parse(c.product.toString());
-			cart.push(c);
-		}
+	addProductToBucket(product) {
+		this._cart.addProductToBucket(product)
+		this.updateCart(this._cart);
+	}
 
-		localStorage.setItem('cart' + this.userService.user.id, JSON.stringify(cart));
+	updateLocalStorage(cart: Cart) {
+		// let cart: Cart = Object.assign(new Cart({}), c);
+		localStorage.setItem('cart' + this.userService.user.id, cart.toString());
 	}
 
 	updateCart(cart) {
-		this.pushToLocalStorage(cart);
+		this.updateLocalStorage(cart);
 		this.cartSubject.next(this.getCartFromLocalStorage());
+	}
+
+	getCoupons() {
+		return this.http.get("/coupons")
 	}
 }

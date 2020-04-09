@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProductsService } from '../home/products.service'
 import { UserService } from '../user/user.service'
 import { Product } from '../home/product.model';
+import { Bucket } from '../cart/cart.model';
 
 @Component({
 	selector: 'app-product',
@@ -13,7 +14,7 @@ import { Product } from '../home/product.model';
 export class ProductComponent implements OnInit {
 
 	id: string;
-	product: any = {};
+	product: Product = new Product({});
 	quantity: number = 1;
 	constructor(
 		private route: ActivatedRoute,
@@ -35,7 +36,7 @@ export class ProductComponent implements OnInit {
 	}
 
 	getProduct() {
-		this.productService.getProduct(this.id).subscribe((product) => {
+		this.productService.getProduct(this.id).subscribe((product: Product) => {
 			this.product = product;
 		})
 	}
@@ -45,7 +46,7 @@ export class ProductComponent implements OnInit {
 	}
 
 	addToCart() {
-		this.productService.updateCart({quantity: this.quantity, product: this.product});
+		this.productService.addProductToBucket({quantity: this.quantity, product: this.product});
 		this.router.navigate(['/cart']);
 	}
 

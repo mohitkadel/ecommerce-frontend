@@ -35,6 +35,10 @@ export class LoginService {
 		this.userSubject.next(res.data);
 	}
 
+	updateUserInfo(res) {
+		this.userSubject.next(res);
+	}
+
 	login(body) {
 		return this.http.post("/login", body)
 			.pipe(map((res: LoginResponse) => {

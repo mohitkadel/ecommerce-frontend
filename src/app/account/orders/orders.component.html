@@ -2,13 +2,14 @@
 	<div class="card-body">
 		<h5 class="card-title mb-4">Recent orders </h5>
 		<div class="row">
+			<div class="col-md-6" *ngIf="!orders.length"> No Orders Found!</div>
 			<div class="col-md-6" *ngFor="let order of orders">
 				<figure class="itemside  mb-3">
 					<div class="aside">
 						<img [src]="image.url" *ngFor="let image of (order.product | async)?.images" width="100px" height="100px">
 					</div>
 					<figcaption class="info">
-						<time class="text-muted"><i class="fa fa-calendar-alt"></i> 12.09.2019</time>
+						<time class="text-muted"><i class="fa fa-calendar-alt"></i>{{ order.created_at | date:'medium' }}</time>
 						<p>{{(order.product | async)?.title}}</p>
 						<span class="text-warning">{{(order.product | async)?.status}}</span>
 					</figcaption>

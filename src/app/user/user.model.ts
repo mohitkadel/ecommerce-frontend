@@ -10,6 +10,7 @@ export class Order {
     private _final_price: number;
     private _status: string;
     private _coupon: ICoupon;
+    private _created_at: string;
 
     private _product: any;
 
@@ -19,6 +20,7 @@ export class Order {
         this._final_price = order.final_price;
         this._status = order.status;
         this._coupon = order.coupon;
+        this._created_at = order.created_at;
     }
 
     get product_id() {
@@ -39,6 +41,10 @@ export class Order {
 
     get coupon() {
         return this._coupon;
+    }
+
+    get created_at() {
+        return this._created_at;
     }
 
     set product(product) {

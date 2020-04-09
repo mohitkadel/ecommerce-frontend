@@ -7,7 +7,8 @@ import { UserService } from '../../user/user.service'
 
 function MustMatch(controlName: string, matchingControlName: string): ValidatorFn {
 	return (control: AbstractControl): {
-		[key: string]: any } | null => {
+		[key: string]: any
+	} | null => {
 
 		// self value (e.g. retype password)
 		let v = control.value;
@@ -38,7 +39,7 @@ export class ChangePasswordComponent implements OnInit {
 	user: User;
 	error: string;
 	success: string;
-	
+
 	@ViewChild('myForm', { static: false }) myForm: NgForm;
 
 	constructor(
@@ -56,16 +57,17 @@ export class ChangePasswordComponent implements OnInit {
 	ngOnInit() {}
 
 	onSubmit() {
-		console.log(this.changePasswordForm.value)
 		if (this.changePasswordForm.valid) {
 			this.userService.changePassword(this.user.id, { password: this.changePasswordForm.value.password, newPassword: this.changePasswordForm.value.newPassword })
 				.subscribe((res: any) => {
+						this.error = null;
 						this.success = "Password Updated Successfully."
+						this.myForm.resetForm();
 					},
 					(error: any) => {
-						console.log('error')
 						console.log(error)
-						this.error = error.error;
+						this.error = error.error.error;
+						this.myForm.resetForm();
 						// this.loading = false;
 					});
 		}

@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import { LoginService } from './login/login.service';
 import { filter, map, catchError } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { of, throwError  } from 'rxjs';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -28,9 +28,10 @@ export class AuthInterceptor implements HttpInterceptor {
         // });
         console.log('request')
         console.log(request)
-        request = request.clone({ url: 'http://localhost:8080/api' + request.url });
+        request = request.clone({ url: ' https://ecommerce-api-v1.herokuapp.com/api' + request.url });
 
-        return next.handle(request).pipe(
+        return next.handle(request)
+        .pipe(
             // filter(event => event instanceof HttpResponse),
             // map((event: HttpResponse < any > ) => {
             //     console.log('event')
@@ -43,7 +44,8 @@ export class AuthInterceptor implements HttpInterceptor {
                 }
                 // console.log('of(error)')
                 // console.log(of(error))
-                return of(error);
+                // return of(error);
+                return throwError(error);
             })
         );
     }

@@ -11,10 +11,10 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr *ngIf="!cart || (cart && cart.length==0)">
+					<tr *ngIf="!cart.bucket.length">
 						<td colspan="4">No products in cart</td>
 					</tr>
-					<tr *ngFor="let item of cart; let i = index">
+					<tr *ngFor="let item of cart.bucket; let i = index">
 						<td>
 							<figure class="itemside">
 								<div class="aside">
@@ -27,7 +27,7 @@
 							</figure>
 						</td>
 						<td>
-							<select class="form-control" size="5" [(ngModel)]="item.quantity" name="quantity">
+							<select class="form-control" size="5" [(ngModel)]="item.quantity" (ngModelChange)="onQuantityChange()" name="quantity">
 								<option *ngFor="let q of getQuantity(item.product.quantity); let i = index;" [ngValue]="i+1">{{i+1}}</option>
 							</select>
 						</td>
@@ -35,7 +35,7 @@
 							<div class="price-wrap">
 								<var class="price">{{item.quantity*item.product.price | currency:"USD":"symbol" }} </var>
 								<small class="text-muted" *ngIf="item.quantity > 1"> {{item.product.price|currency:"USD":"symbol"}} each </small>
-							</div> <!-- price-wrap .// -->
+							</div>
 						</td>
 						<td class="text-right">
 							<a href="javascript:void(0)" class="btn btn-danger" (click)="removeFromCart(i)"> Remove</a>
@@ -43,47 +43,95 @@
 					</tr>
 				</tbody>
 			</table>
-			<div class="card-body border-top">
-				<a href="javascript:void(0)" class="btn btn-primary float-md-right" (click)="makePayment()"> Make Purchase <i class="fa fa-chevron-right"></i> </a>
+			<div class="card-body border-top" >
+				<a href="javascript:void(0)" class="btn btn-primary float-md-right" (click)="makePayment()" *ngIf="cart.bucket.length"> Make Purchase <i class="fa fa-chevron-right"></i> </a>
 				<a href="/" class="btn btn-light"> <i class="fa fa-chevron-left"></i> Continue shopping </a>
 			</div>
 		</div> <!-- card.// -->
 	</main> <!-- col.// -->
-	<aside class="col-md-3">
+	<aside class="col-md-3" *ngIf="cart.bucket.length ">
 		<div class="card mb-3">
-			<div class="card-body">
-				<form [formGroup]="couponForm" (ngSubmit)="applyCoupon()">
-					<div class="form-group">
-						<label>Have coupon?</label>
-						<div class="input-group">
+			<div class="card-body text-center" *ngIf="coupons.length" >
+				<!-- <form [formGroup]="couponForm" (ngSubmit)="applyCoupon()"> -->
+					<!-- <div class="form-group"> -->
+						<label>
+							<!-- Have coupon?  -->
+							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#couponModal">
+								Available Coupons
+							</button>
+						</label>
+						<!-- <div class="input-group">
 							<input type="text" class="form-control" name="" placeholder="Coupon code">
 							<span class="input-group-append">
 								<button class="btn btn-primary">Apply</button>
 							</span>
-						</div>
-					</div>
-				</form>
-			</div> <!-- card-body.// -->
-		</div> <!-- card .// -->
+						</div> -->
+					<!-- </div> -->
+				<!-- </form> -->
+			</div>
+		</div>
 		<div class="card">
 			<div class="card-body">
 				<dl class="dlist-align">
-					<dt>Total price:</dt>
-					<dd class="text-right">{{totalPrice | currency:"USD":"symbol"}}</dd>
+					<dt>Price:</dt>
+					<dd class="text-right">{{cart.price | currency:"USD":"symbol"}}</dd>
 				</dl>
-				<dl class="dlist-align">
-					<dt>Discount:</dt>
-					<dd class="text-right">USD 658</dd>
+				<dl class="dlist-align" *ngIf="cart.discounts_applied.length">
+					<dt>Discounts:</dt>
+					<dd class="text-right discount row" *ngFor="let item of cart.discounts_applied; let i = index">
+						<div class="col">
+							<code>{{item.code}}</code>
+						</div>
+						<div class="col">
+							{{item.percentage}}%
+						</div>
+						<div class="col">
+							- {{item.price | currency:"USD":"symbol"}}
+						</div>
+					</dd>
 				</dl>
 				<dl class="dlist-align">
 					<dt>Total:</dt>
-					<dd class="text-right  h5"><strong>$1,650</strong></dd>
+					<dd class="text-right  h5"><strong>{{cart.total | currency:"USD":"symbol"}}</strong></dd>
 				</dl>
 				<hr>
-				<p class="text-center mb-3">
+				<!-- <p class="text-center mb-3">
 					<img src="images/misc/payments.png" height="26">
-				</p>
-			</div> <!-- card-body.// -->
-		</div> <!-- card .// -->
-	</aside> <!-- col.// -->
+				</p> -->
+			</div>
+		</div>
+	</aside>
+</div>
+<div class="modal fade" id="couponModal" tabindex="-1" role="dialog" aria-labelledby="couponModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Coupons</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<p>One coupon to be applied per transaction!</p>
+				<table class="table">
+					<tbody>
+						<tr *ngFor="let coupon of coupons">
+							<td class="text-center">
+								<code>{{coupon.code}}</code>
+							</td>
+							<td>
+								<code>{{coupon.discount}}% OFF</code>
+							</td>
+							<td class="text-center">
+								<button class="btn btn-success" (click)="applyCoupon(coupon)"  data-dismiss="modal">Apply</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
 </div>

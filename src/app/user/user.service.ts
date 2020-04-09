@@ -13,9 +13,13 @@ export class UserService {
 	_user: User;
 
 	constructor(private http: HttpClient, private loginService: LoginService) {
-		if (this.loginService.userValue) {
-			this._user = new User(this.loginService.userValue);
-		}
+		this.loginService.user.subscribe(user => {
+			if(user) {
+				this._user = new User(user)
+			}
+			else
+				this._user = user
+		});
 	}
 
 	get user() {

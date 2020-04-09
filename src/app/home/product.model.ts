@@ -29,7 +29,7 @@ export class Product {
 	private _type: string;
 	private _quantity: number;
 	private _status: string;
-	private _images: Image[];
+	private _images: Image[] = [];
 	private _price: number;
 	private _product_id: string;
 	private _id: string;
@@ -42,8 +42,11 @@ export class Product {
 			else
 				this["_" + key] = product[key]
 		}
-		console.log('this')
-		console.log(this)
+		// for(let image of product.images) {
+		// 	this._images.push(new Image(image, this.id));
+		// }
+		// console.log('this')
+		// console.log(this)
 	}
 
 	get id() {
@@ -73,9 +76,8 @@ export class Product {
 	get price() {
 		return this._price;
 	}
-	
+
 	get images() {
-		console.log("here/...")
 		let images = [];
 		for(let image of this._images) {
 			images.push(new Image(image, this.id));
@@ -84,10 +86,18 @@ export class Product {
 	}
 
 	toString(): string {
+		return JSON.stringify(this.toJSON());
+	}
+
+	toJSON() {
 		let obj:any = {};
 		for(let key in this) {
-			obj[key.slice(1)] = this[key]
+			if(typeof this[key]['toJSON'] == "function") {
+				obj[key.slice(1)] = this[key]['toJSON']()
+			}
+			else
+				obj[key.slice(1)] = this[key]
 		}
-		return JSON.stringify(obj);
+		return obj;
 	}
 }

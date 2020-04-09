@@ -53,7 +53,6 @@ export class FormComponent implements OnInit {
 	ngOnInit() {}
 
 	onSubmit() {
-		console.log(this.accountForm.valid)
 		if (this.accountForm.valid) {
 			let body:any = {};
 			body.name = this.accountForm.value.name;
@@ -61,11 +60,14 @@ export class FormComponent implements OnInit {
 			body.dob = this.accountForm.value.dob;
 
 			this.userService.updateUser(this.user.id, body).subscribe((user: User) => {
+				this.error = null;
 				this.user = user;
 				this.success = "Details updated successfully."
 			}, error => {
 				console.log(error)
 				this.error = error.error;
+				// this.myForm.resetForm();
+				this.success = null;
 				// this.loading = false;
 			})
 		}
