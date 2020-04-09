@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { LoginService } from './login/login.service';
 import { filter, map, catchError } from 'rxjs/operators';
 import { of, throwError  } from 'rxjs';
+import { environment } from './../environments/environment';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -28,7 +29,7 @@ export class AuthInterceptor implements HttpInterceptor {
         // });
         console.log('request')
         console.log(request)
-        request = request.clone({ url: ' https://ecommerce-api-v1.herokuapp.com/api' + request.url });
+        request = request.clone({ url: environment.APIURL + request.url });
 
         return next.handle(request)
         .pipe(

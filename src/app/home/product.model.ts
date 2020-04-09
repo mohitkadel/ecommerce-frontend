@@ -1,3 +1,5 @@
+import { environment } from '../../environments/environment';
+
 class Image {
 	private _url: string;
 	private _name: string;
@@ -19,7 +21,7 @@ class Image {
 	}
 
 	get url() {
-		return "http://localhost:8080/api/products/" + this.productId + "/images/" + this.name;
+		return environment.APIURL + "/products/" + this.productId + "/images/" + this.name;
 	}
 }
 
