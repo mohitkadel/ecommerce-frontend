@@ -17,7 +17,7 @@ class Login {
 })
 export class LoginComponent implements OnInit {
 
-	error: string;
+	error: any;
 
 	loginForm = new FormGroup({
 		email: new FormControl(''),
